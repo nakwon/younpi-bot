@@ -30,7 +30,7 @@ export default async function handler(req, res) {
             }
         }
 
-        const sets = Array.from({ length: 5 }, generateUniqueLotto);
+        const sets = Array.from({ length: 10 }, generateUniqueLotto);
         const result = sets.map(s => s.join(", ")).join("\n");
 
         // ---- 5️⃣ 카카오 오픈빌더 응답 ----
