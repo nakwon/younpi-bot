@@ -17,5 +17,5 @@ while True:
     round_lotto += 1
 
 # JSON 파일로 저장
-with open('lotto_1st_all.txt', 'w', encoding='utf-8') as f:
+with open('lotto_results.txt', 'w', encoding='utf-8') as f:
     json.dump(lotto_numbers_list, f, ensure_ascii=False, indent=2)
