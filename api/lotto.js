@@ -1,34 +1,50 @@
+// api/lotto.js
+
+import fs from 'fs';
+import path from 'path';
+
 export default async function handler(req, res) {
-    // 오픈빌더가 POST로 요청함
-    if (req.method !== "POST") {
-        return res.status(405).json({ error: "Method Not Allowed" });
+    // ✅ 1. 역대 당첨번호 로드
+    const filePath = path.join(process.cwd(), 'data', 'lotto_results.json');
+    const pastResults = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+    // ✅ 2. 조합을 문자열로 저장해서 빠른 비교용 Set 생성
+    const pastSet = new Set(
+        pastResults.map(arr => arr.sort((a, b) => a - b).join(','))
+    );
+
+    // ✅ 3. 중복되지 않는 새 번호 생성
+    function generateUniqueLotto() {
+        while (true) {
+            const nums = Array.from({ length: 45 }, (_, i) => i + 1);
+            const picks = [];
+            for (let i = 0; i < 6; i++) {
+                const idx = Math.floor(Math.random() * nums.length);
+                picks.push(nums.splice(idx, 1)[0]);
+            }
+            picks.sort((a, b) => a - b);
+            const key = picks.join(',');
+            if (!pastSet.has(key)) {
+                return picks;
+            }
+        }
     }
 
-    // 로또 번호 생성 함수
-    const genLotto = () => {
-        const nums = [];
-        while (nums.length < 6) {
-            const n = Math.floor(Math.random() * 45) + 1;
-            if (!nums.includes(n)) nums.push(n);
-        }
-        return nums.sort((a, b) => a - b);
-    };
 
-    // 여러 세트 생성
-    const sets = Array.from({ length: 5 }, genLotto);
-    const text = sets.map(s => s.join(", ")).join("\n");
+    // ✅ 4. 최종 로또번호 생성
+    const result = generateUniqueLotto();
 
-    // 카카오 오픈빌더 응답 포맷(JSON)
-    const response = {
-        version: "2.0",
+    // ✅ 5. 카카오 오픈빌더용 응답 형식
+    const responseBody = {
+        version: '2.0',
         template: {
             outputs: [{
                 simpleText: {
-                    text: `🎰 오늘의 추천 로또 번호 🎰\n\n${text}`
+                    text: `🎰 추천 로또 번호 🎰\n${result.join(', ')}`
                 }
             }]
         }
     };
 
-    res.status(200).json(response);
+    res.status(200).json(responseBody);
 }
