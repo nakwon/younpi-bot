@@ -14,7 +14,7 @@ export default async function handler(req, res) {
         );
 
         // ---- 4️⃣ 중복되지 않는 새로운 조합 생성 ----
-        function generateUniqueLotto() {
+        const generateUniqueLotto = () => {
             while (true) {
                 const nums = Array.from({ length: 45 }, (_, i) => i + 1);
                 const picks = [];
@@ -30,7 +30,8 @@ export default async function handler(req, res) {
             }
         }
 
-        const result = generateUniqueLotto();
+        const sets = Array.from({ length: 5 }, generateUniqueLotto);
+        const result = sets.map(s => s.join(", ")).join("\n");
 
         // ---- 5️⃣ 카카오 오픈빌더 응답 ----
         const responseBody = {
@@ -38,7 +39,7 @@ export default async function handler(req, res) {
             template: {
                 outputs: [{
                     simpleText: {
-                        text: `🎰 역대 당첨번호 제외 랜덤 추천 🎰\n${result.join(", ")}`,
+                        text: `🎰 역대 당첨번호 제외 랜덤 추천 🎰\n${result}`,
                     },
                 }, ],
             },
