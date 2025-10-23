@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
         // ---- 3️⃣ Set으로 변환 (빠른 중복 체크용) ----
         const pastSet = new Set(
-            pastResults.map((arr) => arr.sort((a, b) => a - b).join(","))
+            pastResults.splice(1).map((arr) => arr.sort((a, b) => a - b).join(","))
         );
 
         // ---- 4️⃣ 중복되지 않는 새로운 조합 생성 ----

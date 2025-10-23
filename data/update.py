@@ -6,8 +6,7 @@ lotto_numbers_list = []
 with open('lotto_results.json', 'r') as f:
     lotto_numbers_list = json.load(f)
 
-round_lotto = len(lotto_numbers_list)
-print(round_lotto)
+round_lotto = len(lotto_numbers_list) + 1
 
 while True:
     drwNo = round_lotto
@@ -19,7 +18,7 @@ while True:
         print(f'{drwNo}회는 아직 추첨하지 않았습니다.')
         break
     else:
-        lotto_numbers_list.append([data['drwtNo1'],data['drwtNo2'],data['drwtNo3'],data['drwtNo4'],data['drwtNo5'],data['drwtNo6']])
+        lotto_numbers_list.append([drwNo,data['drwtNo1'],data['drwtNo2'],data['drwtNo3'],data['drwtNo4'],data['drwtNo5'],data['drwtNo6']])
     round_lotto += 1
 
 # JSON 파일로 저장
