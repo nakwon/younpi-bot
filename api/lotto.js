@@ -5,7 +5,7 @@ import path from "path";
 export default async function handler(req, res) {
     try {
         // ---- 2️⃣ JSON 파일에서 역대 당첨번호 불러오기 ----
-        const filePath = path.join(process.cwd(), "data", "lotto_results.txt");
+        const filePath = path.join(process.cwd(), "data", "lotto_results.json");
         const pastResults = JSON.parse(fs.readFileSync(filePath, "utf8"));
 
         // ---- 3️⃣ Set으로 변환 (빠른 중복 체크용) ----
