@@ -2,7 +2,13 @@ import requests
 import json
 
 lotto_numbers_list = []
-round_lotto = 1
+
+with open('lotto_results.json', 'r') as f:
+    lotto_numbers_list = json.load(f)
+
+round_lotto = len(lotto_numbers_list)
+print(round_lotto)
+
 while True:
     drwNo = round_lotto
     url = f'https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo={drwNo}'
@@ -17,5 +23,5 @@ while True:
     round_lotto += 1
 
 # JSON 파일로 저장
-with open('lotto_results.txt', 'w', encoding='utf-8') as f:
-    json.dump(lotto_numbers_list, f, ensure_ascii=False, indent=2)
+with open('lotto_results.json', 'w', encoding='utf-8') as f:
+    json.dump(lotto_numbers_list, f, ensure_ascii=False, indent=1)
